@@ -87,7 +87,7 @@ services:
   # Events Microservice
   events-service:
     build:
-      context: ./src/microservices/events
+      context: ../src/microservices/events
       dockerfile: Dockerfile
     container_name: cinemaabyss-events-service
     depends_on:
