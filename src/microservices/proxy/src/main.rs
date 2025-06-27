@@ -70,12 +70,13 @@ async fn handle_request(
         return Ok(Response::new(Body::from("OK")));
     }
 
-    let backend = if flags.use_movies() {
+    let backend = if req.uri().path().starts_with("/api/users") {
+        &flags.monolith
+    } else if flags.use_movies() {
         &flags.movies
     } else {
         &flags.monolith
     };
-
     info!("Choosed backend: {}", backend);
 
     let (parts, body) = req.into_parts();
