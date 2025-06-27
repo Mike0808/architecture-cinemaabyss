@@ -57,7 +57,8 @@ services:
       dockerfile: Dockerfile
     container_name: cinemaabyss-monolith
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
@@ -73,11 +74,12 @@ services:
       dockerfile: Dockerfile
     container_name: cinemaabyss-movies-service
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
-      - "8081:8081"
+      - "8083:8083"
     environment:
-      PORT: 8081
+      PORT: 8083
       DB_CONNECTION_STRING: postgres://postgres:postgres_password@postgres:5432/cinemaabyss?sslmode=disable
     networks:
       - cinemaabyss-network
@@ -114,7 +116,7 @@ services:
     environment:
       PORT: 8000
       MONOLITH_URL: http://monolith:8080
-      MOVIES_SERVICE_URL: http://movies-service:8081
+      MOVIES_SERVICE_URL: http://movies-service:8083
       EVENTS_SERVICE_URL: http://events-service:8082
       GRADUAL_MIGRATION: "true"
       MOVIES_MIGRATION_PERCENT: "50"

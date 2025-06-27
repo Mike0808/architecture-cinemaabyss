@@ -25,7 +25,7 @@ WORKDIR /root/
 COPY --from=builder /app/movies-service .
 
 # Expose the application port
-EXPOSE 8081
+EXPOSE 8083
 
 # Command to run the executable
 CMD ["./movies-service"]

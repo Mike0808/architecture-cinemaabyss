@@ -1,0 +1,23 @@
+@startuml Kinobezdna Streaming Service - Current vs Target Architecture
+!include <C4/C4_Container>
+title Current Architecture ("As Is") - Monolithic
+AddElementTag("monolithic", $bgColor="#ffcccc", $fontColor="#000000", $borderColor="#aa0000", $legendText="Monolithic Component")
+AddElementTag("external", $bgColor="#ccccff", $fontColor="#000000", $borderColor="#0000aa", $legendText="External System")
+AddElementTag("database", $bgColor="#ffffcc", $fontColor="#000000", $borderColor="#aaaa00", $legendText="Database")
+
+System_Boundary(b1, "Current System") {
+    Container(monolith, "Kinobezdna Monolith", "Go", "All business logic", $tags="monolithic")
+    ContainerDb(db, "PostgreSQL", "Database", "Single database for all data", $tags="database")
+    
+    Rel(monolith, db, "Reads/Writes", "SQL")
+}
+
+Container(mobile, "Mobile App", "iOS/Android", "Provides UI for mobile users", $tags="external")
+Container(web, "Web Browser", "JavaScript", "Provides UI for desktop users", $tags="external")
+Container(tv, "Smart TV App", "Platform-specific", "Provides UI for TV users", $tags="external")
+Container(recsys, "Recommendation System", "External Service", "Provides personalized recommendations", $tags="external")
+
+Rel(mobile, monolith, "API Calls", "REST")
+Rel(web, monolith, "API Calls", "REST")
+Rel(tv, monolith, "API Calls", "REST")
+Rel(monolith, recsys, "Get recommendations", "REST")

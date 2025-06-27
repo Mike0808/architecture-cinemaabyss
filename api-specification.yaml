@@ -3,7 +3,7 @@ info:
   title: CinemaAbyss API
   description: |
     API спецификация для системы CinemaAbyss, включающая монолит и микросервисы.
-    
+
     Система CinemaAbyss представляет собой платформу для управления фильмами, пользователями, платежами и подписками.
     Архитектура системы включает монолитное приложение и выделенные микросервисы.
   version: 1.0.0
@@ -16,7 +16,7 @@ servers:
     description: API Gateway (Proxy Service)
   - url: http://localhost:8080
     description: Монолитное приложение
-  - url: http://localhost:8081
+  - url: http://localhost:8083
     description: Микросервис фильмов
   - url: http://localhost:8082
     description: Микросервис событий
@@ -45,7 +45,7 @@ paths:
       description: Возвращает статус работоспособности прокси-сервиса
       operationId: getProxyHealth
       responses:
-        '200':
+        "200":
           description: Успешный ответ
           content:
             text/plain:
@@ -62,20 +62,20 @@ paths:
       description: Возвращает список всех фильмов с их метаданными
       operationId: getAllMovies
       responses:
-        '200':
+        "200":
           description: Успешный ответ
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Movie'
-        '500':
+                  $ref: "#/components/schemas/Movie"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
     post:
       tags:
         - movies
@@ -88,26 +88,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MovieInput'
+              $ref: "#/components/schemas/MovieInput"
       responses:
-        '201':
+        "201":
           description: Фильм успешно создан
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Movie'
-        '400':
+                $ref: "#/components/schemas/Movie"
+        "400":
           description: Некорректный запрос
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /api/movies/health:
     get:
@@ -117,7 +117,7 @@ paths:
       description: Возвращает статус работоспособности микросервиса фильмов
       operationId: getMoviesServiceHealth
       responses:
-        '200':
+        "200":
           description: Успешный ответ
           content:
             application/json:
@@ -137,20 +137,20 @@ paths:
       description: Возвращает список всех пользователей системы
       operationId: getAllUsers
       responses:
-        '200':
+        "200":
           description: Успешный ответ
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
-        '500':
+                  $ref: "#/components/schemas/User"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
     post:
       tags:
         - users
@@ -163,26 +163,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserInput'
+              $ref: "#/components/schemas/UserInput"
       responses:
-        '201':
+        "201":
           description: Пользователь успешно создан
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/User"
+        "400":
           description: Некорректный запрос
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   # Монолит - платежи
   /api/payments:
@@ -200,20 +200,20 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Успешный ответ
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Payment'
-        '500':
+                  $ref: "#/components/schemas/Payment"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
     post:
       tags:
         - payments
@@ -226,26 +226,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentInput'
+              $ref: "#/components/schemas/PaymentInput"
       responses:
-        '201':
+        "201":
           description: Платеж успешно создан
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Payment'
-        '400':
+                $ref: "#/components/schemas/Payment"
+        "400":
           description: Некорректный запрос
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   # Монолит - подписки
   /api/subscriptions:
@@ -263,20 +263,20 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Успешный ответ
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Subscription'
-        '500':
+                  $ref: "#/components/schemas/Subscription"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
     post:
       tags:
         - subscriptions
@@ -289,26 +289,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubscriptionInput'
+              $ref: "#/components/schemas/SubscriptionInput"
       responses:
-        '201':
+        "201":
           description: Подписка успешно создана
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscription'
-        '400':
+                $ref: "#/components/schemas/Subscription"
+        "400":
           description: Некорректный запрос
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   # Микросервис событий
   /api/events/health:
@@ -319,7 +319,7 @@ paths:
       description: Возвращает статус работоспособности микросервиса событий
       operationId: getEventsServiceHealth
       responses:
-        '200':
+        "200":
           description: Успешный ответ
           content:
             application/json:
@@ -343,26 +343,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MovieEvent'
+              $ref: "#/components/schemas/MovieEvent"
       responses:
-        '201':
+        "201":
           description: Событие успешно создано
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EventResponse'
-        '400':
+                $ref: "#/components/schemas/EventResponse"
+        "400":
           description: Некорректный запрос
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /api/events/user:
     post:
@@ -377,26 +377,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserEvent'
+              $ref: "#/components/schemas/UserEvent"
       responses:
-        '201':
+        "201":
           description: Событие успешно создано
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EventResponse'
-        '400':
+                $ref: "#/components/schemas/EventResponse"
+        "400":
           description: Некорректный запрос
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /api/events/payment:
     post:
@@ -411,26 +411,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentEvent'
+              $ref: "#/components/schemas/PaymentEvent"
       responses:
-        '201':
+        "201":
           description: Событие успешно создано
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EventResponse'
-        '400':
+                $ref: "#/components/schemas/EventResponse"
+        "400":
           description: Некорректный запрос
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Внутренняя ошибка сервера
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
@@ -779,7 +779,7 @@ components:
           description: Смещение в партиции Kafka
           example: 42
         event:
-          $ref: '#/components/schemas/Event'
+          $ref: "#/components/schemas/Event"
       required:
         - status
         - partition
