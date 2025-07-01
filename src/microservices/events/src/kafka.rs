@@ -6,15 +6,17 @@ use futures::StreamExt;
 use log::{info, error};
 use crate::models::Event;
 use std::time::Duration;
+use std::env;
 
-const KAFKA_BROKERS: &str = env::var("KAFAKA_BROKERS_URL")
-    .unwrap_or("localhost:9092".into())
-    .parse()
-    .expect("Invalid KAFAKA_BROKERS URL");
 
 const TOPIC: &str = "events";
 
 pub async fn produce_event(event: Event) -> Result<(), Box<dyn std::error::Error>> {
+    let KAFKA_BROKERS: String = env::var("KAFAKA_BROKERS_URL")
+    .ok()
+    .filter(|v| !v.trim().is_empty())
+    .unwrap_or_else(|| "localhost:9092".to_string());
+
     let producer: FutureProducer = ClientConfig::new()
         .set("bootstrap.servers", KAFKA_BROKERS)
         .set("message.timeout.ms", "5000")
@@ -36,6 +38,11 @@ pub async fn produce_event(event: Event) -> Result<(), Box<dyn std::error::Error
 }
 
 pub async fn consume_events() {
+    let KAFKA_BROKERS: String = env::var("KAFAKA_BROKERS_URL")
+    .ok()
+    .filter(|v| !v.trim().is_empty())
+    .unwrap_or_else(|| "localhost:9092".to_string());
+
     let consumer: StreamConsumer = ClientConfig::new()
         .set("group.id", "events-service")
         .set("bootstrap.servers", KAFKA_BROKERS)
