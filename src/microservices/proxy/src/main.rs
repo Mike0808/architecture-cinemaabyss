@@ -70,7 +70,10 @@ async fn handle_request(
         return Ok(Response::new(Body::from("OK")));
     }
 
-    let backend = if req.uri().path() == "/api/movies" {
+    let path = req.uri().path();
+
+    let backend = if path.starts_with("/api/movies") {
+        info!("Path {} starts with /api/movies", path);
         if flags.use_movies() {
             &flags.movies
         } else {
