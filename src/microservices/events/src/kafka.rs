@@ -7,7 +7,11 @@ use log::{info, error};
 use crate::models::Event;
 use std::time::Duration;
 
-const KAFKA_BROKERS: &str = "localhost:9092";
+const KAFKA_BROKERS: &str = env::var("KAFAKA_BROKERS_URL")
+    .unwrap_or("localhost:9092".into())
+    .parse()
+    .expect("Invalid KAFAKA_BROKERS URL");
+
 const TOPIC: &str = "events";
 
 pub async fn produce_event(event: Event) -> Result<(), Box<dyn std::error::Error>> {

@@ -29,8 +29,8 @@ spec:
           env:
             - name: PORT
               value: "8082"
-            - name: DB_CONNECTION_STRING
-              value: "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"
+            - name: KAFAKA_BROKERS_URL
+              value: "kafka:9092"
           envFrom:
             - configMapRef:
                 name: cinemaabyss-config
