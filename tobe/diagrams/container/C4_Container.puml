@@ -1,0 +1,87 @@
+@startuml Kinobezdna Streaming Service - Current vs Target Architecture
+!include <C4/C4_Container>
+
+AddElementTag("microservice", $bgColor="#ccffcc", $fontColor="#000000", $borderColor="#00aa00", $legendText="Microservice")
+AddElementTag("database", $bgColor="#ffffcc", $fontColor="#000000", $borderColor="#aaaa00", $legendText="Database")
+AddElementTag("external", $bgColor="#98A1BC", $fontColor="#000000", $borderColor="#0000aa", $legendText="External System")
+AddElementTag("queue", $bgColor="#ccccff", $fontColor="#000000", $borderColor="#0000aa", $legendText="External System")
+
+' ********************* LEGEND *********************
+SHOW_LEGEND()
+
+
+
+' ********************* TARGET ("TO BE") ARCHITECTURE *********************
+title Target Architecture ("To Be") - Microservices
+
+System_Boundary(b2, "Target System (Kubernetes Cluster)") {
+    Container(auth, "Auth Service", "Go/Node.js", "Handles authentication & authorization", $tags="microservice")
+    Container(users, "User Profile Service", "Go", "Manages user profiles and preferences", $tags="microservice")
+    Container(content_meta, "Content Service", "Go", "Manage video metadata and catalog", $tags="microservice")
+    Container(video_process, "Video Processing Service", "Go", "Transcoding video, thumbnails, meta", $tags="microservice")
+    Container(video_stream, "Video Streaming Service", "Go", "Stream video to user", $tags="microservice")
+    Container(video_upload, "Video Upload Service", "Go", "Uploading video", $tags="microservice")
+    Container(payments, "Payment Service", "Go", "Processes subscriptions and payments", $tags="microservice")
+    Container(recom, "Recomendation Service", "Go", "Handles recomendations for user", $tags="microservice")
+    Container(recom_etl, "Recomendation ETL Service", "Go", "Handles user ratings and reviews", $tags="microservice")
+    Container(api_gw, "API Gateway", "Kong/Nginx", "Routes requests to services", $tags="microservice")
+    
+    ContainerDb(users_db, "Users DB", "MongoDB", "Stores user data", $tags="database")
+    ContainerDb(content_db, "Content DB", "S3", "Stores video original and processed", $tags="database")
+    ContainerDb(catalog_db, "Catalog DB", "PostgreSQL", "Stores video metadata", $tags="database")
+    ContainerDb(payments_db, "Payments DB", "PostgreSQL", "Stores payment data", $tags="database")
+    ContainerDb(auth_db, "Auth DB", "Redis", "Stores session data", $tags="database")
+    ContainerDb(recom_db, "Recomendation DB", "PostgreSQL", "Stores recomendation for users", $tags="database")
+
+    ContainerQueue(notify, "Notification", "Apache Kafka", "Handles video process", $tags="queue")
+
+    Rel(auth, users, "Reads/Writes", "gRPC")
+    Rel(auth, auth_db, "Reads/Writes", "kv")
+    Rel(users, users_db, "Reads/Writes", "SQL")
+    Rel(content_meta, catalog_db, "Reads/Writes", "SQL")
+    Rel(video_stream, content_db, "Reads", "")
+    Rel(payments, payments_db, "Reads/Writes", "SQL")
+    Rel(video_upload, content_db, "Save video file", "")
+    Rel(video_process, content_db, "Transcode Video Uploaded files", "File")
+
+    Rel(video_upload, notify, "Puplish Video Upload events", "Kafka Protocol")  
+    Rel(notify, video_process, "Consume Video Upload events", "Kafka Protocol")
+    Rel(video_process, notify, "Publish Video processed events", "Kafka Protocol")
+    Rel(content_meta, notify, "Consume Video Uploaded events", "Kafka Protocol")
+
+    Rel(api_gw, auth, "Routes auth requests", "HTTP")
+    Rel(api_gw, users, "Routes profile requests", "HTTP")
+    Rel(api_gw, video_stream, "Routes video requests", "HTTP")
+    Rel(api_gw, content_meta, "Routes content requests", "HTTP")
+    Rel(api_gw, payments, "Routes payment requests", "HTTP")
+    Rel(api_gw, video_upload, "Routes video upload requests", "HTTP")
+
+    Rel(recom_etl, users_db, "Reads", "JSON")
+    Rel(recom, recom_db, "Reads/Writes", "SQL")
+    Rel(recom_etl, recom_db, "Writes", "SQL")
+    Rel(api_gw, recom, "Routes recomendations requests", "HTTP")
+    Rel(video_stream, content_meta, "Reads video info", "")
+  
+
+}
+
+Container(mobile2, "Mobile App", "iOS/Android", $tags="external")
+Container(web2, "Web Browser", "JavaScript", $tags="external")
+Container(tv2, "Smart TV App", "Platform-specific", $tags="external")
+ContainerQueue(recsys2, "Recommendation System", "External Service", $tags="external")
+
+Rel(mobile2, api_gw, "API Calls", "REST")
+Rel(web2, api_gw, "API Calls", "REST")
+Rel(tv2, api_gw, "API Calls", "REST")
+Rel(recom_etl, recsys2, "Push/Get recommendations", "REST")
+
+' ********************* DEPLOYMENT INFO *********************
+note right of b2
+  **Target Deployment:**
+  - Kubernetes cluster
+  - CI/CD pipeline
+  - Horizontal scaling
+  - Service mesh
+end note
+
+@enduml
