@@ -12,7 +12,7 @@ use std::env;
 const TOPIC: &str = "events";
 
 pub async fn produce_event(event: Event) -> Result<(), Box<dyn std::error::Error>> {
-    let KAFKA_BROKERS: String = env::var("KAFAKA_BROKERS_URL")
+    let KAFKA_BROKERS: String = env::var("KAFKA_BROKERS")
     .ok()
     .filter(|v| !v.trim().is_empty())
     .unwrap_or_else(|| "localhost:9092".to_string());
@@ -38,7 +38,7 @@ pub async fn produce_event(event: Event) -> Result<(), Box<dyn std::error::Error
 }
 
 pub async fn consume_events() {
-    let KAFKA_BROKERS: String = env::var("KAFAKA_BROKERS_URL")
+    let KAFKA_BROKERS: String = env::var("KAFKA_BROKERS")
     .ok()
     .filter(|v| !v.trim().is_empty())
     .unwrap_or_else(|| "localhost:9092".to_string());
