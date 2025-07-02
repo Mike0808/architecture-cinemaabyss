@@ -21,4 +21,4 @@ data:
   GRADUAL_MIGRATION: {{ .Values.config.gradualMigration | quote }}
   MOVIES_MIGRATION_PERCENT: {{ .Values.config.moviesMigrationPercent | quote }}
 
-  KAFAKA_BROKERS_URL: {{ .Values.config.kafkaBrokersUrl | quote }}
+  KAFKA_BROKERS: {{ .Values.config.kafkaBrokersUrl | quote }}

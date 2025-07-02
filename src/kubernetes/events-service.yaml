@@ -29,7 +29,7 @@ spec:
           env:
             - name: PORT
               value: "8082"
-            - name: KAFAKA_BROKERS_URL
+            - name: KAFKA_BROKERS
               value: "kafka:9092"
           envFrom:
             - configMapRef:
